@@ -15,9 +15,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
@@ -61,12 +59,10 @@ public class user extends AppCompatActivity implements View.OnClickListener {
     }
 
     private void initViews() {
-        checkView = (ImageView) findViewById(R.id.check);
+        checkView = findViewById(R.id.check);
         parentLayout = findViewById(android.R.id.content);
         context=this;
         tablenum=user_choice.getTablenum();
-        items.add("Pizza");items.add("Pasta");items.add("Chilli Potato");items.add("Biryani");
-        items.add("Maggi");items.add("Burger");items.add("Veg Roll");items.add("Coke");
         submit= findViewById(R.id.submit);submit.setOnClickListener(this);
         status1= findViewById(R.id.status1);
         status2= findViewById(R.id.status2);
@@ -429,7 +425,6 @@ public class user extends AppCompatActivity implements View.OnClickListener {
                 int m8=Integer.parseInt(text8.getText().toString());
                 orddet="s,"+tablenum+","+m1+","+m2+","+m3+","+m4+","+m5+","+m6+","+m7+","+m8;
                 billamount=m1*200+m2*150+m3*100+m4*200+m5*50+m6*100+m7*50+m8*40;
-                Toast.makeText(this, orddet, Toast.LENGTH_LONG).show();
                 chirpSdk.start();
                 byte[] payload=orddet.getBytes();
                 chirpSdk.send(payload);

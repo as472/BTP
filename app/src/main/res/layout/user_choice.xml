@@ -19,7 +19,7 @@
         android:layout_centerInParent="true"
         android:gravity="center"
         android:id="@+id/input"
-        android:inputType="text"/>
+        android:inputType="number" />
 
     <Button
         android:id="@+id/submit"

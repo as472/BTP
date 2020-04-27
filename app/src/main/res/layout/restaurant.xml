@@ -6,7 +6,7 @@
 
     <TextView
         android:layout_marginTop="16dp"
-        android:layout_marginLeft="8dp"
+        android:layout_marginLeft="12dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Send Confirmation"
@@ -16,92 +16,89 @@
     </TextView>
 
     <EditText
-        android:layout_marginTop="42dp"
-        android:layout_marginLeft="8dp"
-        android:layout_width="48dp"
+        android:layout_marginTop="6dp"
+        android:layout_marginLeft="52dp"
+        android:layout_width="40dp"
+        android:gravity="center"
+        android:layout_below="@+id/some"
         android:layout_height="wrap_content"
-        android:id="@+id/table"/>
+        android:id="@+id/table"
+        android:inputType="number" />
 
     <Button
         android:id="@+id/send"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/some"
-        android:layout_marginLeft="235dp"
-        android:layout_marginTop="1dp"
-        android:layout_toRightOf="@+id/table"
+        android:layout_below="@+id/table"
+        android:layout_marginLeft="28dp"
+        android:layout_marginTop="8dp"
         android:text="Send"
+        android:textAllCaps="false"
+        android:textSize="16sp" />
+
+    <TextView
+        android:id="@+id/some1"
+        android:layout_toRightOf="@+id/some"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="28dp"
+        android:layout_marginTop="16dp"
+        android:text="Mark Completed Orders"
+        android:textSize="18sp"></TextView>
+
+    .
+    <EditText
+        android:layout_below="@+id/some1"
+        android:layout_marginTop="6dp"
+        android:layout_marginLeft="268dp"
+        android:layout_width="40dp"
+        android:gravity="center"
+        android:layout_height="wrap_content"
+        android:id="@+id/order"
+        android:inputType="number" />
+
+    <Button
+        android:id="@+id/mark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/order"
+        android:layout_marginTop="8dp"
+        android:text="Mark"
+        android:layout_marginLeft="244dp"
         android:textAllCaps="false"
         android:textSize="16sp" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/table"
-        android:paddingTop="4dp"
+        android:layout_below="@+id/send"
         android:id="@+id/divider1"
         android:text="--------------------------------------------------------------------------------------------------">
 
     </TextView>
 
     <TextView
-        android:layout_below="@+id/divider1"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="8dp"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Mark Completed Orders"
-        android:textSize="18sp"
-        android:id="@+id/some1"
+        android:id="@+id/status"
+        android:layout_below="@+id/divider1"
+        android:text=""
+        android:textSize="16sp"
+        android:layout_marginLeft="32dp"
         >
-    </TextView>
-
-    <EditText
-        android:layout_below="@+id/divider1"
-        android:layout_marginTop="42dp"
-        android:layout_marginLeft="8dp"
-        android:layout_width="48dp"
-        android:layout_height="wrap_content"
-        android:id="@+id/order"/>
-
-    <Button
-        android:id="@+id/mark"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/some"
-        android:layout_marginLeft="235dp"
-        android:layout_marginTop="113dp"
-        android:layout_toRightOf="@+id/table"
-        android:text="Mark"
-        android:textAllCaps="false"
-        android:textSize="16sp" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/order"
-        android:paddingTop="4dp"
-        android:id="@+id/divider2"
-        android:text="--------------------------------------------------------------------------------------------------">
 
     </TextView>
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/scroll"
-        android:layout_marginTop="240dp"
-        android:layout_marginBottom="12dp"
-        >
-        <LinearLayout
+        android:layout_marginTop="210dp"
+        android:layout_marginBottom="16dp">
+
+        <RelativeLayout
+            android:id="@+id/linear_layout"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/linear_layout"
-                android:orientation="vertical">
-            </LinearLayout>
-        </LinearLayout>
+            android:layout_height="wrap_content"></RelativeLayout>
     </ScrollView>
 </RelativeLayout>

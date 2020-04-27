@@ -35,8 +35,12 @@ public class user_choice extends AppCompatActivity implements View.OnClickListen
         switch (v.getId()) {
             case R.id.submit:
                 Toast.makeText(this, "Entering Ordering Pane", Toast.LENGTH_SHORT).show();
-                tablenum=Integer.parseInt(input.getText().toString());
-                startActivity(new Intent(user_choice.this, user.class));
+                if (!input.getText().toString().equals("")) {
+                    tablenum = Integer.parseInt(input.getText().toString());
+                    startActivity(new Intent(user_choice.this, user.class));
+                } else
+                    Toast.makeText(this, "Please Enter Table Number", Toast.LENGTH_SHORT).show();
+
         }
     }
 

@@ -12,11 +12,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,16 +41,15 @@ public class restaurant extends AppCompatActivity implements View.OnClickListene
     static HashMap<Integer,Integer> map=new HashMap<>();
     static List<String> items=new LinkedList<>();
     static List<Integer> price=new LinkedList<>();
-    LinearLayout linearLayout;
+    RelativeLayout linearLayout;
     private ChirpSDK chirpSdk;
     private Context context;
     private static final int RESULT_REQUEST_RECORD_AUDIO = 1;
     Boolean startStopSdkBtnPressed = false;
     int order_num=0;
-    TextView pending,ongoing;
+    TextView status;
     int num_pend=0,num_ongo=0;
 
-    String show="";
     Button mark,send;
     EditText order,table;
     String CHIRP_APP_KEY = "18CeB46BF3F1a0d54f17fAB81";
@@ -57,7 +58,7 @@ public class restaurant extends AppCompatActivity implements View.OnClickListene
 
     String TAG = "BTP-V1";
     View parentLayout;
-    LinearLayout textLinearLayout;
+    RelativeLayout textLinearLayout;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,12 +70,13 @@ public class restaurant extends AppCompatActivity implements View.OnClickListene
     private void addTextViews() {
 
         //Adding a LinearLayout with HORIZONTAL orientation
-        textLinearLayout = new LinearLayout(this);
-        textLinearLayout.setOrientation(LinearLayout.VERTICAL);
+        textLinearLayout = new RelativeLayout(this);
         linearLayout.addView(textLinearLayout);
         Iterator itr=pend.entrySet().iterator();
-
+        status = findViewById(R.id.status);
+        int i = 0;
         while(itr.hasNext()){
+
             Map.Entry mp=(Map.Entry)itr.next();
             int f=(int)mp.getKey();
             String ff=(String)mp.getValue();
@@ -82,16 +84,21 @@ public class restaurant extends AppCompatActivity implements View.OnClickListene
             int fff=get_tablenum(ff);
             TextView tt=new TextView(this);
             tt.setText(fff+"");
-            setTextViewAttributes2(tt);
+            i++;
+            tt.setId(i);
+            setTextViewAttributes2(tt, i);
             textLinearLayout.addView(tt);
             TextView textView = new TextView(this);
             textView.setText(text);
-            setTextViewAttributes1(textView);
+            i++;
+            textView.setId(i);
+            setTextViewAttributes1(textView, i);
             textLinearLayout.addView(textView);
         }
 
         Iterator itr1=ongo.entrySet().iterator();
         while(itr1.hasNext()){
+            i++;
             Map.Entry mp=(Map.Entry)itr1.next();
             int f=(int)mp.getKey();
             String ff=(String)mp.getValue();
@@ -99,60 +106,66 @@ public class restaurant extends AppCompatActivity implements View.OnClickListene
             int fff=get_tablenum(ff);
             TextView tt=new TextView(this);
             tt.setText(fff+"");
-            setTextViewAttributes2(tt);
+            tt.setId(i);
+            setTextViewAttributes2(tt, i);
             textLinearLayout.addView(tt);
             TextView textView = new TextView(this);
             textView.setText(text);
-            setTextViewAttributes(textView);
+            i++;
+            textView.setId(i);
+            setTextViewAttributes(textView, i);
             textLinearLayout.addView(textView);
         }
     }
 
-    private void setTextViewAttributes(TextView textView) {
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
+    private void setTextViewAttributes(TextView textView, int i) {
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
 
-        params.setMargins(convertDpToPixel(16),
-                convertDpToPixel(16),
+        params.setMargins(convertDpToPixel(16), convertDpToPixel(16),
                 0, 0
         );
-
-        textView.setTextColor(Color.BLACK);
-        textView.setBackgroundColor(Color.GREEN);
-        textView.setLayoutParams(params);
-    }
-
-    private void setTextViewAttributes1(TextView textView) {
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-
-        params.setMargins(convertDpToPixel(16),
-                convertDpToPixel(16),
-                0, 0
-        );
-
-        textView.setTextColor(Color.BLACK);
-        textView.setBackgroundColor(Color.RED);
-        textView.setLayoutParams(params);
-    }
-
-    private void setTextViewAttributes2(TextView textView) {
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT);
-        params.weight=1.0f;
-        params.gravity= Gravity.CENTER_VERTICAL;
-
-
-        params.setMargins(convertDpToPixel(16),
-                convertDpToPixel(16),
-                0, 0
-        );
-
+        params.addRule(RelativeLayout.RIGHT_OF, i - 1);
+        if (i > 2) params.addRule(RelativeLayout.BELOW, i - 2);
         textView.setTextColor(Color.WHITE);
-        textView.setTextSize(16);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f);
+        params.setMarginStart(convertDpToPixel(16));
+        params.setMarginEnd(convertDpToPixel(75));
+        textView.setBackgroundColor(getResources().getColor(R.color.green));
+        textView.setLayoutParams(params);
+    }
+
+    private void setTextViewAttributes1(TextView textView, int i) {
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                RelativeLayout.LayoutParams.MATCH_PARENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT);
+
+        params.setMargins(convertDpToPixel(16), convertDpToPixel(16), 0, 0
+        );
+
+        if (i > 2) params.addRule(RelativeLayout.BELOW, i - 2);
+        params.addRule(RelativeLayout.RIGHT_OF, i - 1);
+        params.setMarginStart(convertDpToPixel(16));
+        params.setMarginEnd(convertDpToPixel(75));
+        textView.setTextColor(Color.WHITE);
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 20f);
+        textView.setBackgroundColor(getResources().getColor(R.color.red));
+        textView.setLayoutParams(params);
+    }
+
+    private void setTextViewAttributes2(TextView textView, int i) {
+        RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(
+                LinearLayout.LayoutParams.WRAP_CONTENT,
+                LinearLayout.LayoutParams.WRAP_CONTENT);
+
+        params.setMargins(convertDpToPixel(16), convertDpToPixel(16),
+                0, 0
+        );
+        params.setMarginStart(convertDpToPixel(16));
+        textView.setTextSize(TypedValue.COMPLEX_UNIT_SP, 16f);
+        textView.setTextColor(Color.WHITE);
+        if (i > 2) params.addRule(RelativeLayout.BELOW, i - 1);
         textView.setGravity(Gravity.CENTER);
         textView.setBackground(getResources().getDrawable(R.drawable.magnitude_circle));
         textView.setLayoutParams(params);
@@ -172,6 +185,7 @@ public class restaurant extends AppCompatActivity implements View.OnClickListene
         mark=findViewById(R.id.mark);mark.setOnClickListener(this);
         order=findViewById(R.id.order);
         table=findViewById(R.id.table);
+        status = findViewById(R.id.status);
         menu.put("Pizza",200);menu.put("Pasta",150);menu.put("Chilli Potato",100);menu.put("Biryani",200);
         menu.put("Maggi",50);menu.put("Burger",100);menu.put("Veg Roll",50);menu.put("Coke",40);
         items.add("Pizza");items.add("Pasta");items.add("Chilli Potato");items.add("Biryani");
@@ -189,10 +203,9 @@ public class restaurant extends AppCompatActivity implements View.OnClickListene
         if (setConfigError.getCode() > 0) {
             Log.e(TAG, setConfigError.getMessage());
         }
-        String versionDisplay = chirpSdk.getVersion() + "\n" +
-                chirpSdk.getProtocolName() + " v" + chirpSdk.getProtocolVersion();
         chirpSdk.setListener(chirpEventListener);
         chirpSdk.start();
+        status.setText(num_pend + " Pending Orders                  " + num_ongo + " Ongoing Orders");
 
     }
 
@@ -202,39 +215,55 @@ public class restaurant extends AppCompatActivity implements View.OnClickListene
         switch (v.getId()) {
             case R.id.mark:
                 String tep="";
-                tn=Integer.parseInt(order.getText().toString());
-                if(map.containsKey(tn)) {
-                    on = map.get(tn);
-                    ongo.remove(on);
-                    map.remove(tn);
-                    num_ongo--;
-                    linearLayout.removeView(textLinearLayout);
-                    addTextViews();
-                    Toast.makeText(this, "Table Number " + tn + " Marked Completed", Toast.LENGTH_SHORT).show();
-                }
-                else{
-                    Toast.makeText(this, "Invalid Order", Toast.LENGTH_SHORT).show();
-                }
+                if (!order.getText().toString().equals("")) {
+                    tn = Integer.parseInt(order.getText().toString());
+                    if (map.containsKey(tn)) {
+                        on = map.get(tn);
+                        if (ongo.containsKey(on)) {
+                            ongo.remove(on);
+                            map.remove(tn);
+                            num_ongo--;
+                            linearLayout.removeView(textLinearLayout);
+                            addTextViews();
+                            Toast.makeText(this, "Table Number " + tn + " Marked Completed", Toast.LENGTH_SHORT).show();
+                            status.setText(num_pend + " Pending Orders                  " + num_ongo + " Ongoing Orders");
+                        } else {
+                            Toast.makeText(this, "Order is Pending! Cannot be marked completed!", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(this, "Invalid Order!", Toast.LENGTH_SHORT).show();
+                    }
+                } else
+                    Toast.makeText(this, "Please Enter Table Number", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.send:
-                tn=Integer.parseInt(table.getText().toString());
-                if(map.containsKey(tn)){
-                on=map.get(tn);
-                String t1="",t2="";
-                String pay=pend.get(on);
-                String temp="r,"+tn+","+on;
-                byte[] payload=temp.getBytes();
-                chirpSdk.send(payload);
-                pend.remove(on);
-                ongo.put(on,pay);
-                num_pend--;
-                num_ongo++;
-                linearLayout.removeView(textLinearLayout);
-                addTextViews();
-                Toast.makeText(this, "Confirmation sent for Table Number "+tn, Toast.LENGTH_SHORT).show();}
-                else{
-                    Toast.makeText(this, "Invalid Order", Toast.LENGTH_SHORT).show();
-                }
+                if (!table.getText().toString().equals("")) {
+                    tn = Integer.parseInt(table.getText().toString());
+                    if (map.containsKey(tn)) {
+                        on = map.get(tn);
+                        if (pend.containsKey(on)) {
+                            String t1 = "", t2 = "";
+                            String pay = pend.get(on);
+                            String temp = "r," + tn + "," + on;
+                            byte[] payload = temp.getBytes();
+                            chirpSdk.send(payload);
+                            pend.remove(on);
+                            ongo.put(on, pay);
+                            num_pend--;
+                            num_ongo++;
+                            linearLayout.removeView(textLinearLayout);
+                            addTextViews();
+                            Toast.makeText(this, "Confirmation sent for Table Number " + tn, Toast.LENGTH_SHORT).show();
+                        } else {
+                            Toast.makeText(this, "Order Confirmation already sent!", Toast.LENGTH_SHORT).show();
+                        }
+                    } else {
+                        Toast.makeText(this, "Invalid Order!", Toast.LENGTH_SHORT).show();
+                    }
+                    status.setText(num_pend + " Pending Orders                  " + num_ongo + " Ongoing Orders");
+                } else
+                    Toast.makeText(this, "Please Enter Table Number", Toast.LENGTH_SHORT).show();
+
                 break;
         }
     }
@@ -248,7 +277,7 @@ public class restaurant extends AppCompatActivity implements View.OnClickListene
                {
                    int m=Integer.parseInt(temp[i]);
                    if(m!=0)
-                       piku=piku+m+" "+items.get(i-2)+"\n";
+                       piku = piku + "  " + m + " " + items.get(i - 2) + "\n";
                }
             }
         }
@@ -311,7 +340,7 @@ public class restaurant extends AppCompatActivity implements View.OnClickListene
             if (data != null) {
                 hexData = new String(data);
             }
-            Toast.makeText(restaurant.this, hexData, Toast.LENGTH_SHORT).show();
+            //Toast.makeText(restaurant.this, hexData, Toast.LENGTH_SHORT).show();
             Log.v(TAG, "ChirpSDKCallback: onReceived: " + hexData + " on channel: " + channel);
             updatePayload(hexData);
         }
@@ -399,6 +428,23 @@ public class restaurant extends AppCompatActivity implements View.OnClickListene
                             pend.put(++order_num, newPayload);
                             map.put(Integer.parseInt(temp[1]), order_num);
                             num_pend++;
+                            status.setText(num_pend + " Pending Orders                  " + num_ongo + " Ongoing Orders");
+                            linearLayout.removeView(textLinearLayout);
+                            addTextViews();
+                        } else {
+                            Toast.makeText(restaurant.this, "Order from Table Number " + temp[1] + " is updated!", Toast.LENGTH_SHORT).show();
+                            int lf = map.get(Integer.parseInt(temp[1]));
+                            if (ongo.containsKey(lf)) {
+                                ongo.remove(lf);
+                                num_ongo--;
+                                num_pend++;
+                            } else {
+                                pend.remove(lf);
+                            }
+                            map.remove(Integer.parseInt(temp[1]));
+                            pend.put(++order_num, newPayload);
+                            map.put(Integer.parseInt(temp[1]), order_num);
+                            status.setText(num_pend + " Pending Orders                  " + num_ongo + " Ongoing Orders");
                             linearLayout.removeView(textLinearLayout);
                             addTextViews();
                         }
