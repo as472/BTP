@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <TextView
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Send Confirmation"
+        android:textSize="18sp"
+        android:id="@+id/some"
+        >
+    </TextView>
+
+    <EditText
+        android:layout_marginTop="42dp"
+        android:layout_marginLeft="8dp"
+        android:layout_width="48dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/table"/>
+
+    <Button
+        android:id="@+id/send"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/some"
+        android:layout_marginLeft="235dp"
+        android:layout_marginTop="1dp"
+        android:layout_toRightOf="@+id/table"
+        android:text="Send"
+        android:textAllCaps="false"
+        android:textSize="16sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/table"
+        android:paddingTop="4dp"
+        android:id="@+id/divider1"
+        android:text="--------------------------------------------------------------------------------------------------">
+
+    </TextView>
+
+    <TextView
+        android:layout_below="@+id/divider1"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="8dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mark Completed Orders"
+        android:textSize="18sp"
+        android:id="@+id/some1"
+        >
+    </TextView>
+
+    <EditText
+        android:layout_below="@+id/divider1"
+        android:layout_marginTop="42dp"
+        android:layout_marginLeft="8dp"
+        android:layout_width="48dp"
+        android:layout_height="wrap_content"
+        android:id="@+id/order"/>
+
+    <Button
+        android:id="@+id/mark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/some"
+        android:layout_marginLeft="235dp"
+        android:layout_marginTop="113dp"
+        android:layout_toRightOf="@+id/table"
+        android:text="Mark"
+        android:textAllCaps="false"
+        android:textSize="16sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/order"
+        android:paddingTop="4dp"
+        android:id="@+id/divider2"
+        android:text="--------------------------------------------------------------------------------------------------">
+
+    </TextView>
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/scroll"
+        android:layout_marginTop="240dp"
+        android:layout_marginBottom="12dp"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/linear_layout"
+                android:orientation="vertical">
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
