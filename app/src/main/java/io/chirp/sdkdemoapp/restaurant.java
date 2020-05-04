@@ -423,6 +423,7 @@ public class restaurant extends AppCompatActivity implements View.OnClickListene
                 if(newPayload.startsWith("s")){
                     String temp[]=newPayload.split(",");
                     if(temp.length==10) {
+                        int f1 = 0;
                         int tipu = Integer.parseInt(temp[1]);
                         if (!map.containsKey(tipu)) {
                             Toast.makeText(restaurant.this, "Order Received from Table " + temp[1], Toast.LENGTH_SHORT).show();
@@ -432,12 +433,33 @@ public class restaurant extends AppCompatActivity implements View.OnClickListene
                             status.setText(num_pend + " Pending Orders                  " + num_ongo + " Ongoing Orders");
                             linearLayout.removeView(textLinearLayout);
                             addTextViews();
-                        } else if (map.containsKey(tipu) && ongo.containsKey(map.get(tipu))) {
-                            Toast.makeText(restaurant.this, "Table " + tipu + " updated a Confirmed Order!", Toast.LENGTH_SHORT).show();
+                            f1 = 1;
+                        }
+                        if (map.containsKey(tipu) && ongo.containsKey(map.get(tipu)) && f1 == 0) {
+                            if (!check(ongo.get(map.get(tipu)), newPayload)) {
+                                Toast.makeText(restaurant.this, "Table " + tipu + " failed to update a Confirmed Order!", Toast.LENGTH_SHORT).show();
                             String ti = "n," + tipu + "," + map.get(tipu);
                             byte[] payload = ti.getBytes();
                             chirpSdk.send(payload);
-                        } else {
+                                f1 = 1;
+                            }
+                        }
+                        if (map.containsKey(tipu) && ongo.containsKey(map.get(tipu)) && f1 == 0) {
+                            if (check(ongo.get(map.get(tipu)), newPayload)) {
+                                f1 = 1;
+                                Toast.makeText(restaurant.this, "Order from Table Number " + temp[1] + " is updated!", Toast.LENGTH_SHORT).show();
+                                int lf = map.get(Integer.parseInt(temp[1]));
+                                ongo.remove(lf);
+                                map.remove(Integer.parseInt(temp[1]));
+                                pend.put(++order_num, newPayload);
+                                num_ongo--;
+                                num_pend++;
+                                map.put(Integer.parseInt(temp[1]), order_num);
+                                status.setText(num_pend + " Pending Orders                  " + num_ongo + " Ongoing Orders");
+                                linearLayout.removeView(textLinearLayout);
+                                addTextViews();
+                            }
+                        } else if (f1 == 0) {
                             Toast.makeText(restaurant.this, "Order from Table Number " + temp[1] + " is updated!", Toast.LENGTH_SHORT).show();
                             int lf = map.get(Integer.parseInt(temp[1]));
                             pend.remove(lf);
@@ -452,6 +474,30 @@ public class restaurant extends AppCompatActivity implements View.OnClickListene
                 }
             }
         });
+    }
+
+    public boolean check(String a, String b) {
+        int f = 0;
+        int p = 0;
+        int arr[] = new int[8];
+        int arr1[] = new int[8];
+        String temp[] = a.split(",");
+        String temp1[] = b.split(",");
+        for (int k = 2; k < 10; k++) {
+            arr[k - 2] = Integer.parseInt(temp[k]);
+            arr1[k - 2] = Integer.parseInt(temp1[k]);
+        }
+        for (int k = 0; k < 8; k++) {
+            if (arr[k] > arr1[k]) {
+                f = 1;
+                break;
+            }
+            if (arr[k] == arr1[k])
+                p++;
+        }
+        if (f == 0 && p != 8)
+            return true;
+        return false;
     }
 
     public void stopSdk() {
