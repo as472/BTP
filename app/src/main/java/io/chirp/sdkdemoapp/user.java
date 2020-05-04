@@ -15,9 +15,8 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Random;
 import io.chirp.chirpsdk.ChirpSDK;
 import io.chirp.chirpsdk.interfaces.ChirpEventListener;
@@ -36,8 +35,6 @@ public class user extends AppCompatActivity implements View.OnClickListener {
     TextView status3;
     TextView menu;
     LinearLayout layout1,layout2,layout3,layout4,layout5,layout6,layout7,layout8;
-    static List<String> items=new LinkedList<>();
-    static List<Integer> price=new LinkedList<>();
     TextView text1;TextView text2;TextView text3;TextView text4;TextView text5;TextView text6;TextView text7;TextView text8;
     private ChirpSDK chirpSdk;
     private Context context;
@@ -257,7 +254,16 @@ public class user extends AppCompatActivity implements View.OnClickListener {
                     status2.setText("Your Order Number is "+temp[2]);
                     status3.setText("Bill Amount: INR "+billamount);
                 }
-            }}}
+                }
+                } else if (newPayload.startsWith("n")) {
+                    String temp[] = newPayload.split(",");
+                    if (temp.length == 3) {
+                        if (Integer.parseInt(temp[1]) == tablenum) {
+                            Toast.makeText(user.this, "Your Order Number " + Integer.parseInt(temp[2]) + " is already confirmed! Any changes should be communicated to the Manager!", Toast.LENGTH_LONG).show();
+                        }
+                    }
+                }
+            }
         });
     }
 

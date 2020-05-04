@@ -423,7 +423,8 @@ public class restaurant extends AppCompatActivity implements View.OnClickListene
                 if(newPayload.startsWith("s")){
                     String temp[]=newPayload.split(",");
                     if(temp.length==10) {
-                        if (!map.containsKey(Integer.parseInt(temp[1]))) {
+                        int tipu = Integer.parseInt(temp[1]);
+                        if (!map.containsKey(tipu)) {
                             Toast.makeText(restaurant.this, "Order Received from Table " + temp[1], Toast.LENGTH_SHORT).show();
                             pend.put(++order_num, newPayload);
                             map.put(Integer.parseInt(temp[1]), order_num);
@@ -431,16 +432,15 @@ public class restaurant extends AppCompatActivity implements View.OnClickListene
                             status.setText(num_pend + " Pending Orders                  " + num_ongo + " Ongoing Orders");
                             linearLayout.removeView(textLinearLayout);
                             addTextViews();
+                        } else if (map.containsKey(tipu) && ongo.containsKey(map.get(tipu))) {
+                            Toast.makeText(restaurant.this, "Table " + tipu + " updated a Confirmed Order!", Toast.LENGTH_SHORT).show();
+                            String ti = "n," + tipu + "," + map.get(tipu);
+                            byte[] payload = ti.getBytes();
+                            chirpSdk.send(payload);
                         } else {
                             Toast.makeText(restaurant.this, "Order from Table Number " + temp[1] + " is updated!", Toast.LENGTH_SHORT).show();
                             int lf = map.get(Integer.parseInt(temp[1]));
-                            if (ongo.containsKey(lf)) {
-                                ongo.remove(lf);
-                                num_ongo--;
-                                num_pend++;
-                            } else {
-                                pend.remove(lf);
-                            }
+                            pend.remove(lf);
                             map.remove(Integer.parseInt(temp[1]));
                             pend.put(++order_num, newPayload);
                             map.put(Integer.parseInt(temp[1]), order_num);
